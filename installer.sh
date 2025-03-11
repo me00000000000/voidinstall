@@ -43,21 +43,21 @@ diskConfig() {
 
     if drawDialog --title "Partitioner - Encryption" --extra-button --extra-label "Map" --yesno "Should this installation be encrypted?" 0 0 ; then
         encryption="Yes"
-        drawDialog --title "Partitioner - Wipe Disk" --yesno "Would you like to securely wipe the selected disk before setup?\n\nThis can take quite a long time depending on how many passes you choose.\n\nBe aware that doing this on an SSD is likely a bad idea." 0 0 &&
+        drawDialog --title "Partitioner - Wipe Disk" --yesno --defaultno "Would you like to securely wipe the selected disk before setup?\n\nThis can take quite a long time depending on how many passes you choose.\n\nBe aware that doing this on an SSD is likely a bad idea." 0 0 &&
             wipedisk=$(drawDialog --title "Partitioner - Wipe Disk" --inputbox "How many passes would you like to do on this disk?\n\nSane values include 1-3. The more passes you choose, the longer this will take." 0 0)
     else
         [ "$?" == "3" ] && dungeonmap
         encryption="No"
     fi
 
-    if drawDialog --title "Partitioner - LVM" --extra-button --extra-label "Map" --yesno "Would you like to use LVM?" 0 0 ; then
+    if drawDialog --title "Partitioner - LVM" --extra-button --extra-label "Map" --yesno --defaultno "Would you like to use LVM?" 0 0 ; then
         lvm="Yes"
     else
         [ "$?" == "3" ] && dungeonmap
         lvm="No"
     fi
 
-    if drawDialog --title "Disk Details" --extra-button --extra-label "Map" --no-cancel --title "Partitioner - Swap" --yesno "Would you like to use swap?" 0 0 ; then
+    if drawDialog --title "Disk Details" --extra-button --extra-label "Map" --no-cancel --title "Partitioner - Swap" --yesno --defaultno "Would you like to use swap?" 0 0 ; then
         if [ "$lvm" == "Yes" ] || [ "$encryption" == "No" ]; then
             swapStyle=$(drawDialog --begin 2 2 --title "Disk Details" --infobox "$diskIndicator" 0 0 --and-widget --no-cancel --title "Partitioner - Swap" --menu "What style of swap would you like to use?\n\nIf you are unsure, 'swapfile' is recommended." 0 0 0 "swapfile" "- On-filesystem swapfile" "zram" "- RAM in your RAM, but smaller" "partition" "- Traditional swap partition")
         else
@@ -116,7 +116,7 @@ kernelConfig() {
 }
 
 bootloaderConfig() {
-    bootloader=$(drawDialog --no-cancel --title "Bootloader choice" --extra-button --extra-label "Map" --menu "If you are unsure, choose 'grub'" 0 0 0 "grub" "- Traditional bootloader" "uki" "- Unified Kernel Image" "none" "- Installs no bootloader (Advanced)")
+    bootloader=$(drawDialog --no-cancel --title "Bootloader choice" --extra-button --extra-label "Map" --menu "If you are unsure, choose 'grub'" 0 0 0 "uki" "- Unified Kernel Image" "grub" "- Traditional bootloader" "none" "- Installs no bootloader (Advanced)")
     [ "$?" == "3" ] && dungeonmap
 
     hostnameConfig
@@ -171,7 +171,7 @@ localeConfig() {
 }
 
 repositoryConfig() {
-    if drawDialog --title "Repository Mirror" --extra-button --extra-label "Map" --yesno "Would you like to set your repo mirror?\n\nIf not, repo-default will be used." 0 0 ; then
+    if drawDialog --title "Repository Mirror" --extra-button --extra-label "Map" --yesno --defaultno "Would you like to set your repo mirror?\n\nIf not, repo-default will be used." 0 0 ; then
         xmirror
         repository=$(cat /etc/xbps.d/*-repository-main.conf | sed 's/repository=//g')
     else
@@ -218,7 +218,7 @@ audioConfig() {
 }
 
 desktopConfig() {
-    desktop=$(drawDialog --no-cancel --title "Desktop Environment" --extra-button --extra-label "Map" --menu "" 0 0 0 "gnome" "" "kde" "" "xfce" "" "sway" "" "swayfx" "" "wayfire" "" "i3" "" "niri" "" "none" "")
+    desktop=$(drawDialog --no-cancel --title "Desktop Environment" --extra-button --extra-label "Map" --menu "" 0 0 0 "none" "" "gnome" "" "kde" "" "xfce" "" "sway" "" "swayfx" "" "wayfire" "" "i3" "" "niri" "")
     [ "$?" == "3" ] && dungeonmap
 
     case "$desktop" in
