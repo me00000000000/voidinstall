@@ -85,61 +85,23 @@ esac
 
 case "$desktop" in
     gnome)
-        install gnome-core gnome-console gnome-tweaks gnome-browser-connector gnome-text-editor xdg-user-dirs xorg-minimal xorg-video-drivers
+        install gnome-core gnome-console gnome-tweaks gnome-browser-connector gnome-text-editor xdg-user-dirs xorg-minimal xorg-video-drivers firefox
         system "ln -s /etc/sv/gdm /var/service"
     ;;
     kde)
-        install kde-plasma kde-baseapps xdg-user-dirs xorg-minimal xorg-video-drivers
+        install kde-plasma kde-baseapps xdg-user-dirs xorg-minimal xorg-video-drivers firefox
         system "ln -s /etc/sv/sddm /var/service"
     ;;
     xfce)
-        install xfce4 xfce4-pulseaudio-plugin lightdm lightdm-gtk3-greeter xorg-minimal xdg-user-dirs xorg-fonts xorg-video-drivers
+        install xfce4 xfce4-pulseaudio-plugin lightdm lightdm-gtk3-greeter xorg-minimal xdg-user-dirs xorg-fonts xorg-video-drivers firefox
 
         [ "$network" == "NetworkManager" ] &&
             install network-manager-applet
 
         system "ln -s /etc/sv/lightdm /var/service"
     ;;
-    sway)
-        install sway elogind polkit polkit-elogind foot xorg-fonts xdg-desktop-portal-wlr xdg-user-dirs
-
-        [ "$network" == "NetworkManager" ] &&
-            install network-manager-applet
-
-        system "ln -s /etc/sv/polkitd /var/service"
-
-        if [ "$greetd" == "Yes" ]; then
-            install greetd
-            system "ln -s /etc/sv/greetd /var/service"
-            sed -i -e 's,command = "agreety --cmd /bin/sh",command = "agreety --cmd sway-run",' /mnt/etc/greetd/config.toml || die
-            cp misc/sway-run /mnt/usr/local/bin/sway-run || die
-
-            system "chown root:root /usr/local/bin/sway-run"
-            system "chmod 755 /usr/local/bin/sway-run"
-            system "chmod +x /usr/local/bin/sway-run"
-        fi
-    ;;
-    swayfx)
-        install swayfx elogind polkit polkit-elogind foot xorg-fonts xdg-desktop-portal-wlr xdg-user-dirs
-
-        [ "$network" == "NetworkManager" ] &&
-            install network-manager-applet
-
-        system "ln -s /etc/sv/polkitd /var/service"
-
-        if [ "$greetd" == "Yes" ]; then
-            install greetd
-            system "ln -s /etc/sv/greetd /var/service"
-            sed -i -e 's,command = "agreety --cmd /bin/sh",command = "agreety --cmd swayfx-run",' /mnt/etc/greetd/config.toml || die
-            cp misc/sway-run /mnt/usr/local/bin/swayfx-run || die
-
-            system "chown root:root /usr/local/bin/swayfx-run"
-            system "chmod 755 /usr/local/bin/swayfx-run"
-            system "chmod +x /usr/local/bin/swayfx-run"
-        fi
-    ;;
     i3)
-        install i3 xorg-minimal xinit xterm xorg-fonts xorg-video-drivers xdg-user-dirs
+        install i3 i3status xorg-minimal xinit alacritty setxkbmap dmenu dejavu-fonts-ttf xorg-video-drivers xclip xrandr xdg-user-dirs firefox
 
         [ "$network" == "NetworkManager" ] &&
             install network-manager-applet
@@ -147,44 +109,6 @@ case "$desktop" in
         if [ "$lightdm" == "Yes" ]; then
             install lightdm lightdm-gtk3-greeter
             system "ln -s /etc/sv/lightdm /var/service"
-        fi
-    ;;
-    niri)
-        install niri elogind polkit polkit-elogind alacritty fuzzel xorg-fonts xdg-desktop-portal-gtk xdg-desktop-portal-gnome xdg-user-dirs
-
-        [ "$network" == "NetworkManager" ] &&
-            install network-manager-applet
-
-        system "ln -s /etc/sv/polkitd /var/service"
-
-        if [ "$greetd" == "Yes" ]; then
-            install greetd
-            system "ln -s /etc/sv/greetd /var/service"
-            sed -i -e 's,command = "agreety --cmd /bin/sh",command = "agreety --cmd niri-run",' /mnt/etc/greetd/config.toml || die
-            cp misc/niri-run /mnt/usr/local/bin/niri-run || die
-
-            system "chown root:root /usr/local/bin/niri-run"
-            system "chmod 755 /usr/local/bin/niri-run"
-            system "chmod +x /usr/local/bin/niri-run"
-        fi
-    ;;
-    wayfire)
-        install wayfire elogind polkit polkit-elogind alacritty xorg-fonts xdg-desktop-portal-wlr xdg-user-dirs
-
-        [ "$network" == "NetworkManager" ] &&
-            install network-manager-applet
-
-        system "ln -s /etc/sv/polkitd /var/service"
-
-        if [ "$greetd" == "Yes" ]; then
-            install greetd
-            system "ln -s /etc/sv/greetd /var/service"
-            sed -i -e 's,command = "agreety --cmd /bin/sh",command = "agreety --cmd wayfire-run",' /mnt/etc/greetd/config.toml || die
-            cp misc/wayfire-run /mnt/usr/local/bin/wayfire-run || die
-
-            system "chown root:root /usr/local/bin/wayfire-run"
-            system "chmod 755 /usr/local/bin/wayfire-run"
-            system "chmod +x /usr/local/bin/wayfire-run"
         fi
     ;;
 esac

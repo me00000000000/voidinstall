@@ -10,10 +10,7 @@ dependencies=("$(pwd)/modules" \
 "$(pwd)/setup/setupbase" \
 "$(pwd)/setup/setupdesktop" \
 "$(pwd)/setup/setupdisk" \
-"$(pwd)/setup/setupchroot" \
-"$(pwd)/misc/sway-run" \
-"$(pwd)/misc/wayfire-run" \
-"$(pwd)/misc/niri-run")
+"$(pwd)/setup/setupchroot")
 
 for i in ${dependencies[@]}; do
     [ -e "$i" ] ||

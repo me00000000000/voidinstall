@@ -95,7 +95,7 @@ diskConfig() {
             [ "$?" == "3" ] && dungeonmap
         fi
 
-    filesystem=$(drawDialog --no-cancel --title "Partitioner - Filesystem" --extra-button --extra-label "Map" --menu "If you are unsure, choose 'ext4'" 0 0 0 "ext4" "" "xfs" "" "btrfs" "")
+    filesystem=$(drawDialog --no-cancel --title "Partitioner - Filesystem" --extra-button --extra-label "Map" --menu "If you are unsure, choose 'btrfs'" 0 0 0 "btrfs" "" "ext4" "")
     [ "$?" == "3" ] && dungeonmap
 
     suConfig
@@ -218,12 +218,11 @@ audioConfig() {
 }
 
 desktopConfig() {
-    desktop=$(drawDialog --no-cancel --title "Desktop Environment" --extra-button --extra-label "Map" --menu "" 0 0 0 "none" "" "gnome" "" "kde" "" "xfce" "" "sway" "" "swayfx" "" "wayfire" "" "i3" "" "niri" "")
+    desktop=$(drawDialog --no-cancel --title "Desktop Environment" --extra-button --extra-label "Map" --menu "" 0 0 0 "none" "" "gnome" "" "kde" "" "xfce" "" "i3" "")
     [ "$?" == "3" ] && dungeonmap
 
     case "$desktop" in
-        sway|swayfx|wayfire|niri) drawDialog --title "" --extra-button --extra-label "Map" --yesno "Would you like to install greetd with $desktop?" 0 0 && greetd="Yes" ;;
-        i3) drawDialog --title "" --extra-button --extra-label "Map" --yesno "Would you like to install lightdm with i3?" 0 0 && lightdm="Yes" ;;
+        i3) drawDialog --title "" --extra-button --extra-label "Map" --defaultno --yesno "Would you like to install lightdm with i3?" 0 0 && lightdm="Yes" ;;
     esac
 
     modulesConfig
@@ -311,15 +310,6 @@ confirm() {
 
     [ "$desktop" == "i3" ] && [ -n "$lightdm" ] &&
         settings+="Install lightdm with i3?: $lightdm\n"
-
-    for i in sway swayfx niri wayfire
-    do
-        if [ "$desktop" == "$i" ]; then
-            [ -z "$greetd" ] && greetd="No"
-            settings+="Install greetd with $desktop?: $greetd\n"
-            break
-        fi
-    done
 
     [ -n "$modules" ] &&
         settings+="Enabled modules: ${modules[@]}\n"
