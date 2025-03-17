@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Running setupdisk..."
+echo "Running disk..."
 
 if [ -n "$wipedisk" ] && [ "$wipedisk" -gt 0 ]; then
     shred --verbose --random-source=/dev/urandom -n"$wipedisk" --zero "$diskInput" ||
