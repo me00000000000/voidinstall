@@ -1,0 +1,11 @@
+#!/bin/bash
+title=noto-fonts-emoji
+description="- Noto Emojis"
+status=on
+
+main() {
+    commandFailure="Noto Emojis installation has failed." &&
+        install noto-fonts-emoji
+
+    return 0
+}

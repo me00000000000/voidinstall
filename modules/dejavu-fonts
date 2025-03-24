@@ -1,0 +1,11 @@
+#!/bin/bash
+title=dejavu-fonts
+description="- DejaVu fonts"
+status=on
+
+main() {
+    commandFailure="DejaVu fonts installation has failed." &&
+        install dejavu-fonts-ttf
+
+    return 0
+}
